@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Form Validation Exercise</title>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            margin: 30px;
+        }
+
+        label {
+            display: inline-block;
+            width: 180px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Personal Information</h2>
+
+<form id="myForm">
+
+    <label>Enter name*:</label>
+    <input type="text" id="name">
+    <br>
+
+    <label>Sex*:</label>
+    <input type="radio" name="sex" value="Male"> Male
+    <input type="radio" name="sex" value="Female"> Female
+    <br>
+
+    <label>Enter email address*:</label>
+    <input type="text" id="email">
+    <br>
+
+    <label>Enter birthday*:</label>
+    <input type="text" id="birthday" placeholder="MM/DD/YYYY">
+    <br>
+
+    <label>Enter street address*:</label>
+    <input type="text" id="address">
+    <br>
+
+    <label>Enter city*:</label>
+    <input type="text" id="city">
+    <br>
+
+    <label>Select a region*:</label>
+    <select id="region">
+        <option value="">--Select--</option>
+        <option>North</option>
+        <option>Central</option>
+        <option>South</option>
+    </select>
+    <br>
+
+    <label>Enter 5-digit ZIP code*:</label>
+    <input type="text" id="zipcode">
+    <br>
+
+    <button type="button" id="finish">Finish</button>
+    <button type="button" id="clear">Clear</button>
+
+</form>
+
+<script>
+$("#clear").click(function() {
+    $("#myForm")[0].reset();
+});
+
+$("#finish").click(function() {
+
+    if ($("#name").val().trim() == "") {
+        alert("Vui lòng nhập tên");
+        return;
+    }
+
+    if ($("input[name='sex']:checked").length == 0) {
+        alert("Vui lòng chọn giới tính");
+        return;
+    }
+
+    var email = $("#email").val().trim();
+
+    if (email == "") {
+        alert("Vui lòng nhập Email");
+        return;
+    }
+
+    var emailRegex =
+        /^[A-Za-z0-9_-]+(\.[A-Za-z0-9_-]+)?@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)+$/;
+
+    if (!emailRegex.test(email)) {
+        alert("Email không hợp lệ");
+        return;
+    }
+
+    var birthday = $("#birthday").val().trim();
+
+    var dateRegex =
+        /^(0?[1-9]|1[0-2])[/\-](0?[1-9]|[12][0-9]|3[01])[/\-](\d{4})$/;
+
+    var match = birthday.match(dateRegex);
+
+    if (!match) {
+        alert("Ngày sinh không hợp lệ");
+        return;
+    }
+
+    var month = parseInt(match[1]);
+    var day = parseInt(match[2]);
+    var year = parseInt(match[3]);
+
+    var currentYear = new Date().getFullYear();
+
+    if (year >= currentYear) {
+        alert("Năm sinh phải nhỏ hơn năm hiện tại");
+        return;
+    }
+
+    var date = new Date(year, month - 1, day);
+
+    if (date.getMonth() != month - 1 ||
+        date.getDate() != day) {
+        alert("Ngày tháng không hợp lệ");
+        return;
+    }
+
+    if ($("#address").val().trim() == "") {
+        alert("Vui lòng nhập địa chỉ");
+        return;
+    }
+
+    if ($("#city").val().trim() == "") {
+        alert("Vui lòng nhập thành phố");
+        return;
+    }
+
+    if ($("#region").val() == "") {
+        alert("Vui lòng chọn region");
+        return;
+    }
+
+    var zip = $("#zipcode").val().trim();
+
+    if (!/^\d{5}$/.test(zip)) {
+        alert("ZIP code phải có đúng 5 số");
+        return;
+    }
+
+    alert("Dữ liệu hợp lệ!");
+});
+</script>
+
+</body>
+</html>
